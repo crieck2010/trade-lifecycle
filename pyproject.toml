@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trade-lifecycle"
+version = "0.1.0"
+description = "The investment committee in code: strategy lifecycle state machine with machine-enforced promotion gates."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "crieck2010" }]
+keywords = ["trading", "lifecycle", "governance", "promotion-gates", "validation", "quantitative-finance"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Office/Business :: Financial",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+trade-lifecycle = "trade_lifecycle.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/crieck2010/trade-lifecycle"
+Repository = "https://github.com/crieck2010/trade-lifecycle"
+
+[tool.setuptools.packages.find]
+where = ["src"]
