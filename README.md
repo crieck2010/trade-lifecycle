@@ -118,6 +118,24 @@ still lose money: graduation means "earned consideration for capital,"
 not "proven." Thresholds (90 days, 20 trades, distinct approvers) are
 conventions, not derived constants.
 
+## Evidence translation (Tier-1 -> schema v1)
+
+Strategies validated under the two-tier framework carry their evidence
+as `tier1_evidence.json` (the trade-allocate contract), but the
+RESEARCH -> VALIDATED gate reads the trade-swing `ValidationReport`
+(schema v1) shape. `trade_lifecycle.evidence_translate` re-envelopes the
+evidence without re-evaluating it: **same numbers, same verdicts, zero
+new claims.** Every mapped field traces to a source field; anything the
+schema expects but Tier-1 evidence cannot supply is `null` with an
+explicit note — never invented. The report's `strategy.config` is bound
+with the lifecycle's own `config_hash`, and a `translation` provenance
+section records source file, source evaluation date (2026-09-27 for
+REGCOND-1), and `numbers_recomputed: False`. REGCOND-1's artifacts live
+in `docs/validation/regcond-1/` (`config.json` for `register --config`,
+`validation-report-v1.json` for `promote --report`). Full mapping
+table, provenance model, and the config-binding maths are in
+`docs/EVIDENCE_TRANSLATION.md`.
+
 ## Interop
 
 | Sibling | Direction | Contract |

@@ -12,18 +12,19 @@ nothing here can place, route, or size a trade.
 
 from __future__ import annotations
 
-from . import adapters, gates, lifecycle, policy, presets
+from . import adapters, evidence_translate, gates, lifecycle, policy, presets
 from .demo import run_demo
 from .gates import config_hash
 from .lifecycle import STATES, classify
 from .policy import policy_checksum, resolve_policy, write_policy
 from .registry import StrategyRegistry
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __all__ = [
     "StrategyRegistry",
     "STATES",
     "classify",
+    "evidence_translate",
     "gates",
     "lifecycle",
     "policy",

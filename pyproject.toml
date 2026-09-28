@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "trade-lifecycle"
-version = "0.1.0"
+version = "0.2.0"
 description = "The investment committee in code: strategy lifecycle state machine with machine-enforced promotion gates."
 readme = "README.md"
 requires-python = ">=3.10"

@@ -1,0 +1,72 @@
+{
+  "constraints": {
+    "leverage": 1.0,
+    "long_only": true,
+    "shorting": false
+  },
+  "costs": {
+    "bps_per_side": 5,
+    "fill": "next trading day open (t+1)"
+  },
+  "pre_registration": {
+    "amendment": "2026-09-27 (gate set only; spec unchanged)",
+    "frozen": "2026-09-26",
+    "source": "trade-strategies/docs/validation/regcond-1/PRE-REGISTRATION.md"
+  },
+  "rebalance": {
+    "act_on": "first trading day of month",
+    "cadence": "monthly",
+    "signal_as_of": "last trading day of prior month"
+  },
+  "signal": {
+    "contraction": {
+      "ratio_below_ma": true,
+      "z_lt": -1.0
+    },
+    "engine": "trade-macro",
+    "expansion": {
+      "ratio_above_ma": true,
+      "z_gt": 1.0
+    },
+    "indicator": "copper_gold",
+    "ma_window_days": 200,
+    "persist_days": 5,
+    "preset": "standard",
+    "ratio": "CPER_close / GLD_close",
+    "type": "copper_gold_regime",
+    "z_window_days": 252
+  },
+  "strategy_id": "REGCOND-1",
+  "universe": [
+    "SPY",
+    "CPER",
+    "TLT",
+    "GLD"
+  ],
+  "walk_forward": {
+    "embargo_days": 5,
+    "step_weeks": 26,
+    "test_weeks": 26,
+    "train_weeks": 104
+  },
+  "weights": {
+    "CONTRACTION": {
+      "CPER": 0.0,
+      "GLD": 0.4,
+      "SPY": 0.2,
+      "TLT": 0.4
+    },
+    "EXPANSION": {
+      "CPER": 0.2,
+      "GLD": 0.0,
+      "SPY": 0.6,
+      "TLT": 0.2
+    },
+    "NEUTRAL": {
+      "CPER": 0.25,
+      "GLD": 0.25,
+      "SPY": 0.25,
+      "TLT": 0.25
+    }
+  }
+}

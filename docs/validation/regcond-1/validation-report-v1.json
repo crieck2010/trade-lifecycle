@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-09-28T02:26:10.719736+00:00",
+  "strategy": {
+    "name": "REGCOND-1",
+    "family": "regime-conditioned cross-asset tilt",
+    "config": {
+      "strategy_id": "REGCOND-1",
+      "universe": [
+        "SPY",
+        "CPER",
+        "TLT",
+        "GLD"
+      ],
+      "signal": {
+        "type": "copper_gold_regime",
+        "engine": "trade-macro",
+        "indicator": "copper_gold",
+        "preset": "standard",
+        "ratio": "CPER_close / GLD_close",
+        "z_window_days": 252,
+        "ma_window_days": 200,
+        "expansion": {
+          "z_gt": 1.0,
+          "ratio_above_ma": true
+        },
+        "contraction": {
+          "z_lt": -1.0,
+          "ratio_below_ma": true
+        },
+        "persist_days": 5
+      },
+      "rebalance": {
+        "cadence": "monthly",
+        "signal_as_of": "last trading day of prior month",
+        "act_on": "first trading day of month"
+      },
+      "weights": {
+        "EXPANSION": {
+          "SPY": 0.6,
+          "CPER": 0.2,
+          "TLT": 0.2,
+          "GLD": 0.0
+        },
+        "CONTRACTION": {
+          "SPY": 0.2,
+          "CPER": 0.0,
+          "TLT": 0.4,
+          "GLD": 0.4
+        },
+        "NEUTRAL": {
+          "SPY": 0.25,
+          "CPER": 0.25,
+          "TLT": 0.25,
+          "GLD": 0.25
+        }
+      },
+      "constraints": {
+        "long_only": true,
+        "leverage": 1.0,
+        "shorting": false
+      },
+      "costs": {
+        "bps_per_side": 5,
+        "fill": "next trading day open (t+1)"
+      },
+      "walk_forward": {
+        "train_weeks": 104,
+        "test_weeks": 26,
+        "step_weeks": 26,
+        "embargo_days": 5
+      },
+      "pre_registration": {
+        "source": "trade-strategies/docs/validation/regcond-1/PRE-REGISTRATION.md",
+        "frozen": "2026-09-26",
+        "amendment": "2026-09-27 (gate set only; spec unchanged)"
+      }
+    }
+  },
+  "data_provenance": {
+    "source": "trade-strategies/docs/validation/regcond-1/tier1_evidence.json",
+    "evidence_ref": "commit 8648551 / trade-strategies docs/validation/regcond-1/ (trial-4 report + evidence.json; tier-1 numbers computed alongside, no re-run)",
+    "evaluated_at": "2026-09-27T13:18:08+00:00",
+    "evaluator": "trade-overfit",
+    "framework": "two-tier/tier-1",
+    "framework_ref": "trade-strategies docs/validation/GATES.md (adopted 2026-09-27)",
+    "pre_registration": "commit ca2aa4e (frozen before validation); dated amendment 2026-09-27 adopts the two-tier framework prospectively",
+    "n_trials": 2,
+    "note": "Machine-readable Tier-1 entry evidence. The frozen strategy spec is trade-strategies/docs/validation/regcond-1/PRE-REGISTRATION.md."
+  },
+  "backtest": {
+    "engine": null,
+    "engine_notes": [
+      "Tier-1 evidence carries no engine-level backtest record; per-trade and equity-curve detail are unavailable in this translation and are set to null, never zero-filled."
+    ],
+    "initial_cash": null,
+    "final_equity": null,
+    "metrics": {
+      "median_oos_sharpe": 1.385,
+      "max_drawdown": -0.23,
+      "dsr": 1.0,
+      "excess_return_vs_benchmark_after_costs": 0.0491,
+      "sortino": 1.41
+    },
+    "n_trades": null,
+    "n_open_positions": null
+  },
+  "costs": {
+    "model": {
+      "cost_model": "5 bps per side; fills at the next trading day's open (t+1)"
+    },
+    "summary": {
+      "cost_bps_per_side": 5,
+      "fill_lag": "t+1"
+    },
+    "assumptions": "Documented retail cost assumption for liquid US ETFs (frozen pre-registration). All reported gate values are net of these costs."
+  },
+  "validation": {
+    "status": "PASS",
+    "reason": "All 5 Tier-1 gates PASS. Translated from tier1_evidence.json evaluated 2026-09-27T13:18:08+00:00 -- a format translation, not a new validation run.",
+    "gate_preset": "two-tier/tier-1",
+    "gates": [
+      {
+        "name": "oos_sharpe_median",
+        "verdict": "PASS",
+        "metric": "median_oos_sharpe",
+        "op": "gt",
+        "value": 1.385,
+        "threshold": 0.3,
+        "margin": 1.085,
+        "description": "OOS Sharpe (median across walk-forward folds) > 0.3 -- Tier 1 entry gate (two-tier/tier-1)"
+      },
+      {
+        "name": "max_drawdown",
+        "verdict": "PASS",
+        "metric": "max_drawdown",
+        "op": "gt",
+        "value": -0.23,
+        "threshold": -0.25,
+        "margin": 0.01999999999999999,
+        "description": "Max drawdown shallower than -25% -- Tier 1 entry gate (two-tier/tier-1)"
+      },
+      {
+        "name": "deflated_sharpe",
+        "verdict": "PASS",
+        "metric": "dsr",
+        "op": "gt",
+        "value": 1.0,
+        "threshold": 0.8,
+        "margin": 0.19999999999999996,
+        "description": "Deflated Sharpe Ratio > 0.8 (n_trials=2) -- Tier 1 entry gate (two-tier/tier-1)"
+      },
+      {
+        "name": "excess_return_vs_benchmark_net_per_yr",
+        "verdict": "PASS",
+        "metric": "excess_return_vs_benchmark_after_costs",
+        "op": "gt",
+        "value": 0.0491,
+        "threshold": 0.0,
+        "margin": 0.0491,
+        "description": "Excess return vs 60/40 SPY/TLT benchmark, net of costs > 0 -- Tier 1 entry gate (two-tier/tier-1)"
+      },
+      {
+        "name": "sortino",
+        "verdict": "PASS",
+        "metric": "sortino",
+        "op": "gt",
+        "value": 1.41,
+        "threshold": 0.75,
+        "margin": 0.6599999999999999,
+        "description": "Sortino > 0.75 -- Tier 1 entry gate (two-tier/tier-1)"
+      }
+    ],
+    "warnings": [],
+    "evidence": {
+      "median_oos_sharpe": 1.385,
+      "max_drawdown": -0.23,
+      "dsr": 1.0,
+      "excess_return_vs_benchmark_after_costs": 0.0491,
+      "sortino": 1.41
+    },
+    "n_windows_walkforward": 13,
+    "n_windows_source": "trade-strategies/docs/validation/regcond-1/evidence.json walk_forward.n_folds"
+  },
+  "limitations": [
+    "Secular-trend contamination: the copper:gold label is partly a secular-copper-weakness tag over this sample (frozen pre-registration known limitation).",
+    "Label lag: 252-day z + 200-day MA + 5-day persistence; fast regime changes can be missed for a full month (frozen known limitation).",
+    "Thin cycle count (~2-3 full cycles in-sample); the premium must survive across walk-forward folds, not ride one cycle (frozen known limitation).",
+    "CPER/GLD are ETF proxies with expense drag and tracking error vs the metals (frozen known limitation).",
+    "TRANSLATION: this report is a format translation of Tier-1 evidence evaluated 2026-09-27, not a new trade-swing validation run. No numbers were recomputed; backtest-level fields unavailable in the source are null, never zero-filled."
+  ],
+  "translation": {
+    "translator": "trade_lifecycle.evidence_translate",
+    "translator_version": "0.2.0",
+    "kind": "format translation -- NOT a re-validation",
+    "source_file": "tier1_evidence.json",
+    "source_schema_version": 1,
+    "source_evaluated_at": "2026-09-27T13:18:08+00:00",
+    "source_evaluator": "trade-overfit",
+    "source_framework": "two-tier/tier-1",
+    "translated_at": "2026-09-28T02:26:10.719736+00:00",
+    "numbers_recomputed": false,
+    "new_claims": []
+  }
+}
